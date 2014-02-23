@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<project name="arm-maple-gcc" default="build">
+
+    <property name="version" value="4.8.2" />
+    <property name="revision" value="1" />
+
+    <target name="build" depends="linux,macosx,windows"> 
+    </target>
+
+    <target name="install" depends="build">
+        <move file="${ant.project.name}-linux32.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="${ant.project.name}-macosx.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="${ant.project.name}-windows.jar" todir="/var/www/uecide/plugins/compilers" />
+    </target>
+
+    <target name="macosx">
+        <mkdir dir="files" />
+        <!-- For some reason the mac distribution is double-gzipped.  Oddballs... -->
+        <get src="http://static.leaflabs.com/pub/codesourcery/arm-2010q1-188-arm-none-eabi-toolchain-macosx32.tar.gz"
+             dest="files/${ant.project.name}-macosx.tar.gz.gz" usetimestamp="true" />
+        <exec dir="files" executable="gunzip">
+            <arg value="-k" />
+            <arg value="-f" />
+            <arg value="${ant.project.name}-macosx.tar.gz.gz" />
+        </exec>
+
+        <mkdir dir="build/${ant.project.name}" />
+        <mkdir dir="files" />
+        <exec dir="files" executable="tar">
+            <arg value="-zxf" />
+            <arg value="${ant.project.name}-macosx.tar.gz" />
+        </exec>
+        <copy todir="build/${ant.project.name}"> <fileset dir="files/arm" includes="**/*"/> </copy>
+        <copy file="compiler.txt" todir="build/${ant.project.name}/" />
+        <replace file="build/${ant.project.name}/compiler.txt" token="%VERSION%" value="${version}" />
+        <replace file="build/${ant.project.name}/compiler.txt" token="%REVISION%" value="${revision}" />
+        <jar basedir="build" destfile="${ant.project.name}-macosx.jar">
+            <manifest>
+                <attribute name="Version" value="${version}-${revision}" />
+                <attribute name="Author" value="GNU" />
+                <attribute name="Compiler" value="${ant.project.name}-gcc" />
+                <attribute name="Family" value="maple" />
+                <attribute name="Platform" value="macosx" />
+                <attribute name="Arch" value="any" />
+            </manifest>
+        </jar>
+        <delete dir="files/arm" />
+        <delete dir="build" />
+    </target>
+
+    <target name="linux">
+        <mkdir dir="files" />
+        <get src="http://static.leaflabs.com/pub/codesourcery/arm-2010q1-188-arm-none-eabi-toolchain-linux32.tar.gz"
+             dest="files/${ant.project.name}-linux.tar.gz" usetimestamp="true" />
+
+        <mkdir dir="build/${ant.project.name}" />
+        <mkdir dir="files" />
+        <exec dir="files" executable="tar">
+            <arg value="-zxf" />
+            <arg value="${ant.project.name}-linux.tar.gz" />
+        </exec>
+        <copy todir="build/${ant.project.name}"> <fileset dir="files/arm" includes="**/*"/> </copy>
+        <copy file="compiler.txt" todir="build/${ant.project.name}/" />
+        <replace file="build/${ant.project.name}/compiler.txt" token="%VERSION%" value="${version}" />
+        <replace file="build/${ant.project.name}/compiler.txt" token="%REVISION%" value="${revision}" />
+        <jar basedir="build" destfile="${ant.project.name}-linux.jar">
+            <manifest>
+                <attribute name="Version" value="${version}-${revision}" />
+                <attribute name="Author" value="GNU" />
+                <attribute name="Compiler" value="${ant.project.name}" />
+                <attribute name="Family" value="maple" />
+                <attribute name="Platform" value="linux" />
+                <attribute name="Arch" value="i386,amd64" />
+            </manifest>
+        </jar>
+        <delete dir="files/arm" />
+        <delete dir="build" />
+    </target>
+
+    <target name="windows">
+        <mkdir dir="files" />
+        <get src="http://static.leaflabs.com/pub/codesourcery/arm-2010q1-188-arm-none-eabi-toolchain-win32.tar.gz"
+             dest="files/${ant.project.name}-windows.tar.gz" usetimestamp="true" />
+        <exec dir="files" executable="tar">
+            <arg value="-zxf" />
+            <arg value="${ant.project.name}-windows.tar.gz" />
+        </exec>
+        <mkdir dir="build/${ant.project.name}" />
+        <copy todir="build/${ant.project.name}"> <fileset dir="files/arm" includes="**/*"/> </copy>
+        <copy file="compiler.txt" todir="build/${ant.project.name}/" />
+        <replace file="build/${ant.project.name}/compiler.txt" token="%VERSION%" value="${version}" />
+        <replace file="build/${ant.project.name}/compiler.txt" token="%REVISION%" value="${revision}" />
+        <jar basedir="build" destfile="${ant.project.name}-windows.jar">
+            <manifest>
+                <attribute name="Version" value="${version}-${revision}" />
+                <attribute name="Author" value="GNU" />
+                <attribute name="Compiler" value="${ant.project.name}" />
+                <attribute name="Family" value="maple" />
+                <attribute name="Platform" value="windows" />
+                <attribute name="Arch" value="any" />
+            </manifest>
+        </jar>
+        <delete dir="files/arm" />
+        <delete dir="build" />
+    </target>
+
+    <target name="clean">
+        <delete dir="files" />
+        <delete dir="build" />
+        <delete file="${ant.project.name}-linux.jar" />
+        <delete file="${ant.project.name}-macosx.jar" />
+        <delete file="${ant.project.name}-windows.jar" />
+    </target>
+</project>
