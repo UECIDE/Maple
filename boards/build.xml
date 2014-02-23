@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<project name="boards" default="build">
+
+
+    <property name="version" value="1" />
+    <property name="revision" value="1" />
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="/usr/share/java/ant-contrib-1.0b5-SNAPSHOT.jar"/>
+        </classpath>
+    </taskdef>
+
+
+    <sequential>
+        <property prefix="boards" file="../files/maple-ide/hardware/leaflabs/boards.txt" />
+        <propertyselector property="board.list"
+            delimiter=","
+            match="boards\.([^\.]*)\.name"
+            select="\1" />
+    </sequential>
+
+    <target name="build">
+        <mkdir dir="Maple" />
+        <symlink link="Maple/build.xml" resource="../genericBuild.xml" overwrite="true" />
+        <foreach list="${board.list}" param="board" target="board.create"/>
+
+        <subant target="build">
+            <dirset dir="." includes="*"/>
+        </subant>
+
+    </target>
+
+    <target name="board.create">
+        <mkdir dir="Maple/${board}" />
+
+        <propertycopy property="name" from="boards.${board}.name" /> 
+        <propertycopy property="build.mcu" from="boards.${board}.build.mcu" /> 
+        <propertycopy property="build.f_cpu" from="boards.${board}.build.f_cpu" />
+        <propertycopy property="build.core" from="boards.${board}.build.core" />
+        <propertycopy property="build.flavour" from="boards.${board}.build.family" />
+        <propertycopy property="build.density" from="boards.${board}.build.density" />
+        <propertycopy property="build.error_led_port" from="boards.${board}.build.error_led_port" />
+        <propertycopy property="build.error_led_pin" from="boards.${board}.build.error_led_pin" />
+        <propertycopy property="build.vector" from="boards.${board}.build.vect" />
+        <propertycopy property="upload.maximum_size" from="boards.${board}.upload.flash.maximum_size" />
+        <propertycopy property="upload.maximum_ram" from="boards.${board}.upload.ram.maximum_size" />
+        <propertycopy property="upload.altID" from="boards.${board}.upload.altID" />
+        <propertycopy property="upload.usbID" from="boards.${board}.upload.usbID" />
+
+        <propertyfile file="Maple/${board}/board.txt">
+            <entry key="group" value="Maple" />
+            <entry key="family" value="maple" />
+            <entry key="board" value="_BOARD_${board}_" />
+            <entry key="name" value="${name}" />
+            <entry key="build.mcu" value="${build.mcu}" />
+            <entry key="build.f_cpu" value="${build.f_cpu}" />
+            <entry key="build.core" value="${build.core}" />
+            <entry key="build.flavour" value="${build.flavour}" />
+            <entry key="build.density" value="${build.density}" />
+            <entry key="build.error_led_port" value="${build.error_led_port}" />
+            <entry key="build.error_led_pin" value="${build.error_led_pin}" />
+            <entry key="build.vector" value="${build.vector}" />
+            <entry key="upload.maximum_size" value="${upload.maximum_size}" />
+            <entry key="upload.maximum_ram" value="${upload.maximum_ram}" />
+            <entry key="upload.altID" value="${upload.altID}" />
+            <entry key="upload.usbID" value="${upload.usbID}" />
+            <entry key="version" value="${version}" />
+            <entry key="revision" value="${revision}" />
+        </propertyfile>
+    </target>
+
+    <target name="clean">
+        <delete dir="Maple" />
+    </target>
+
+    <target name="install">
+        <subant target="install">
+            <dirset dir="." includes="*"/>
+        </subant>
+    </target>
+
+</project>
+
+<!--
+core.path=api
+
+core.header=WProgram.h
+core.version=18
+core.revision=2
+
+core.flags=-DBOARD_${build.board}::-DMCU_${build.flavour}::-D${build.density}::-DERROR_LED_PORT=${build.error_led_port}::-DERROR_LED_PIN=${build.error_led_pin}::-D${build.vector}::-DMAPLE_IDE::-DARDUINO=${core.version}::
+
+library.path=libraries
+examples.path=examples
+
+board=_UNKNOWN_BOARD_
+
+upload.dfu.name=DFU Capable Board
+upload.dfu.command.linux=${core.root}/tools/linux/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}
+upload.dfu.command.macosx=${core.root}/tools/macosx/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}
+upload.dfu.command.windows=${core.root}/tools/windows/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}
+
+upload.dfu.using=serial
+upload.dfu.dtr=yes
+upload.dfu.rts=yes
+
+sketch.upload=dfu
+
+version=0.0.1
+-->
