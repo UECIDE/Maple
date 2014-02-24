@@ -1,0 +1,23 @@
+#Sun, 23 Feb 2014 21:12:41 +0000
+
+group=Maple
+family=maple
+name=LeafLabs Maple Native (Beta) to Flash
+build.board=_BOARD_maple_native_
+build.mcu=STM32F103ZE
+build.series=stm32f1
+build.f_cpu=72000000L
+build.core=maple
+build.flavour=cortex-m3
+build.density=STM32_HIGH_DENSITY
+build.error_led_port=GPIOC
+build.error_led_pin=15
+build.vector=VECT_TAB_FLASH
+build.ldscript=flash.ld
+build.ldpath=maple_native
+upload.maximum_size=500000
+upload.maximum_ram=61000
+upload.altID=1
+upload.usbID=1EAF\:0003
+version=1
+revision=10

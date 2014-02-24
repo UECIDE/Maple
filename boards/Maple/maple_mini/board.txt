@@ -1,0 +1,23 @@
+#Sun, 23 Feb 2014 21:12:41 +0000
+
+group=Maple
+family=maple
+name=LeafLabs Maple Mini Rev 2 to Flash
+build.board=_BOARD_maple_mini_
+build.mcu=STM32F103CB
+build.series=stm32f1
+build.f_cpu=72000000L
+build.core=maple
+build.flavour=cortex-m3
+build.density=STM32_MEDIUM_DENSITY
+build.error_led_port=GPIOB
+build.error_led_pin=1
+build.vector=VECT_TAB_FLASH
+build.ldscript=flash.ld
+build.ldpath=sram_20k_flash_128k
+upload.maximum_size=108000
+upload.maximum_ram=17000
+upload.altID=1
+upload.usbID=1EAF\:0003
+version=1
+revision=10

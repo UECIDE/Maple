@@ -1,11 +1,11 @@
-name=maple-arm
+name=arm-maple-gcc
 version=%VERSION%
 revision=%REVISION%
+family=maple
 
+cflags=-mcpu=${build.flavour}::-march=armv7-m::-mthumb::-Os::-g::-nostdlib::-ffunction-sections::-fdata-sections::-Wl,--gc-sections
 
-cflags=-mcpu=${build.mcu}::-march=armv7-m::-mthumb::-Os::-g::-nostdlib::-ffunction-sections::-fdata-sections::-Wl,--gc-sections
-
-cppflags=-mcpu=${build.mcu}::-march=armv7-m::-mthumb::-Os::-g::-nostdlib::-ffunction-sections::-fdata-sections::-Wl,--gc-sections::-fno-rtti::-fno-exceptions
+cppflags=-mcpu=${build.flavour}::-march=armv7-m::-mthumb::-Os::-g::-nostdlib::-ffunction-sections::-fdata-sections::-Wl,--gc-sections::-fno-rtti::-fno-exceptions
 
 asflags=-x::assembler-with-cpp
 
@@ -15,9 +15,9 @@ compile.c=${gcc}::${cflags}::${core.flags}::${board.flags}::-o::${object.name}::
 
 compile.cpp=${gpp}::${cppflags}::${core.flags}::${board.flags}::-o::${object.name}::-c::${source.name}::${includes}
 
-compile.link=${gcc}::${ldflags}::${core.ldflags}::${board.ldflags}-o::${build.path}/${filename}.elf::${object.filelist}::-L${core.root}/${core.path}::-L${build.path}::-L${libraries.path}::${libraries}::${core.ldflags}::${board.ldflags}
+compile.link=${gcc}::${ldflags}::${core.ldflags}::${board.ldflags}-o::${build.path}/${filename}.elf::${object.filelist}::-L${build.path}::-L${cache.root}::-Wl,--start-group::${libraries}::-Wl,--end-group
 
-ldflags=-Wl,--gc-sections,-u,main::-T::${find:${ldscript}}::-mcpu=${build.mcu}::-mthumb::-march=armv7-m
+ldflags=-Wl,--gc-sections,-u,main::-mthumb::-march=armv7-m
 
 gcc=${compiler.root}/bin/arm-none-eabi-gcc
 gpp=${compiler.root}/bin/arm-none-eabi-g++

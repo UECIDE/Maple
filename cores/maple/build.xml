@@ -2,7 +2,7 @@
 <project name="maple" default="build">
 
     <property name="version" value="1.5.5" />
-    <property name="revision" value="1" />
+    <property name="revision" value="24" />
 
     <target name="update">
         <mkdir dir="../../files" />
@@ -27,11 +27,17 @@
         <mkdir dir="build" />
         <mkdir dir="build/${ant.project.name}" />
         <mkdir dir="build/${ant.project.name}/api" />
-        <mkdir dir="build/${ant.project.name}/system" />
+        <mkdir dir="build/${ant.project.name}/libmaple" />
+        <mkdir dir="build/${ant.project.name}/ld" />
         <mkdir dir="build/${ant.project.name}/examples" />
         <mkdir dir="build/${ant.project.name}/libraries" />
         <mkdir dir="build/${ant.project.name}/tools" />
-        <copy todir="build/${ant.project.name}/api"> <fileset dir="../../files/maple-ide/hardware/leaflabs/cores/maple/" includes="**/*"/> </copy>
+        <copy todir="build/${ant.project.name}/api"> <fileset dir="../../files/libmaple/wirish/" includes="**/*"/> </copy>
+        <copy todir="build/${ant.project.name}/api" file="main.cxx" />
+        <copy todir="build/${ant.project.name}/api"> <fileset dir="../../files/libmaple/wirish/include/wirish" includes="**/*"/> </copy>
+        <copy todir="build/${ant.project.name}/ld"> <fileset dir="../../files/libmaple/support/ld" includes="**/*" /> </copy>
+
+        <copy todir="build/${ant.project.name}/libmaple"> <fileset dir="../../files/libmaple/libmaple" includes="**/*"/> </copy>
         <copy todir="build/${ant.project.name}/libraries"> <fileset dir="../../files/libmaple/libraries/" includes="**/*"/> </copy>
         <copy todir="build/${ant.project.name}/examples"> <fileset dir="../../files/maple-ide/build/shared/examples/" includes="**/*"/> </copy>
 

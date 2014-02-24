@@ -3,7 +3,7 @@
 
 
     <property name="version" value="1" />
-    <property name="revision" value="1" />
+    <property name="revision" value="9" />
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -21,9 +21,11 @@
     </sequential>
 
     <target name="build">
+<!-- Now the boards are made we want to keep them - there are local modifications to them now...
         <mkdir dir="Maple" />
         <symlink link="Maple/build.xml" resource="../genericBuild.xml" overwrite="true" />
         <foreach list="${board.list}" param="board" target="board.create"/>
+-->
 
         <subant target="build">
             <dirset dir="." includes="*"/>
@@ -43,17 +45,25 @@
         <propertycopy property="build.error_led_port" from="boards.${board}.build.error_led_port" />
         <propertycopy property="build.error_led_pin" from="boards.${board}.build.error_led_pin" />
         <propertycopy property="build.vector" from="boards.${board}.build.vect" />
+        <propertycopy property="build.linker" from="boards.${board}.build.linker" />
         <propertycopy property="upload.maximum_size" from="boards.${board}.upload.flash.maximum_size" />
         <propertycopy property="upload.maximum_ram" from="boards.${board}.upload.ram.maximum_size" />
         <propertycopy property="upload.altID" from="boards.${board}.upload.altID" />
         <propertycopy property="upload.usbID" from="boards.${board}.upload.usbID" />
 
+        <propertyregex property="build.ldscript"
+            input="${build.linker}"
+            regexp="/([^/]+)$"
+            select="\1"
+            casesensitive="false" />
+
         <propertyfile file="Maple/${board}/board.txt">
             <entry key="group" value="Maple" />
             <entry key="family" value="maple" />
-            <entry key="board" value="_BOARD_${board}_" />
             <entry key="name" value="${name}" />
+            <entry key="build.board" value="_BOARD_${board}_" />
             <entry key="build.mcu" value="${build.mcu}" />
+            <entry key="build.series" value="stm32f1" />
             <entry key="build.f_cpu" value="${build.f_cpu}" />
             <entry key="build.core" value="${build.core}" />
             <entry key="build.flavour" value="${build.flavour}" />
@@ -61,6 +71,7 @@
             <entry key="build.error_led_port" value="${build.error_led_port}" />
             <entry key="build.error_led_pin" value="${build.error_led_pin}" />
             <entry key="build.vector" value="${build.vector}" />
+            <entry key="build.ldscript" value="${build.ldscript}" />
             <entry key="upload.maximum_size" value="${upload.maximum_size}" />
             <entry key="upload.maximum_ram" value="${upload.maximum_ram}" />
             <entry key="upload.altID" value="${upload.altID}" />
@@ -68,14 +79,21 @@
             <entry key="version" value="${version}" />
             <entry key="revision" value="${revision}" />
         </propertyfile>
+
+        <copy todir="Maple/${board}">
+            <fileset dir="../files/libmaple/wirish/boards/olimex_stm32_h103/" includes="*" />
+            <fileset dir="../files/libmaple/wirish/boards/olimex_stm32_h103/include" includes="*/**" />
+        </copy>
+    </target>
+
+    <target name="install" depends="build">
+        <subant target="install">
+            <dirset dir="." includes="*"/>
+        </subant>
     </target>
 
     <target name="clean">
-        <delete dir="Maple" />
-    </target>
-
-    <target name="install">
-        <subant target="install">
+        <subant target="clean">
             <dirset dir="." includes="*"/>
         </subant>
     </target>
