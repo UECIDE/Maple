@@ -2,7 +2,7 @@
 
 group=Maple
 family=maple
-name=LeafLabs Maple Native (Beta) to RAM
+description=LeafLabs Maple Native (Beta) to RAM
 build.board=_BOARD_maple_nativeRAM_
 build.mcu=STM32F103ZE
 build.series=stm32f1
@@ -20,4 +20,7 @@ upload.maximum_ram=61000
 upload.altID=0
 upload.usbID=1EAF\:0003
 version=1
-revision=10
+revision=12
+name=maple_nativeRAM
+board.flags=-DBOOTLOADER_maple
+core=maple

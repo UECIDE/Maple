@@ -34,3 +34,6 @@ compile.hex=${objcopy}::-O::binary::${build.path}/${filename}.elf::${build.path}
 compile.lss=${objdump}::-h::-S::${build.path}/${filename}.elf
 compile.size=${size}::${build.path}/${filename}.elf
 
+compiler.error=^([^:]+):(\\d+):.* error: (.*)
+compiler.warning=^([^:]+):(\\d+):.* warning: (.*)
+

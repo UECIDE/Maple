@@ -2,48 +2,15 @@
 <project name="maple" default="build">
 
     <property name="version" value="1.5.5" />
-    <property name="revision" value="24" />
+    <property name="revision" value="29" />
 
-    <target name="update">
-        <mkdir dir="../../files" />
-        <exec executable="git" failonerror="false" dir="../../files">
-            <arg value="clone" />
-            <arg value="--depth" />
-            <arg value="1" />
-            <arg value="git@github.com:leaflabs/maple-ide.git" />
-        </exec>
-        <exec executable="git" failonerror="false" dir="../../files">
-            <arg value="clone" />
-            <arg value="--depth" />
-            <arg value="1" />
-            <arg value="git@github.com:leaflabs/libmaple.git" />
-        </exec>
-        <!--exec executable="git" failonerror="true" dir="../../files/maple-ide">
-            <arg value="pull" />
-        </exec-->
-    </target>
-
-    <target name="build" depends="update">
-        <mkdir dir="build" />
+    <target name="build">
         <mkdir dir="build/${ant.project.name}" />
-        <mkdir dir="build/${ant.project.name}/api" />
-        <mkdir dir="build/${ant.project.name}/libmaple" />
-        <mkdir dir="build/${ant.project.name}/ld" />
-        <mkdir dir="build/${ant.project.name}/examples" />
-        <mkdir dir="build/${ant.project.name}/libraries" />
-        <mkdir dir="build/${ant.project.name}/tools" />
-        <copy todir="build/${ant.project.name}/api"> <fileset dir="../../files/libmaple/wirish/" includes="**/*"/> </copy>
-        <copy todir="build/${ant.project.name}/api" file="main.cxx" />
-        <copy todir="build/${ant.project.name}/api"> <fileset dir="../../files/libmaple/wirish/include/wirish" includes="**/*"/> </copy>
-        <copy todir="build/${ant.project.name}/ld"> <fileset dir="../../files/libmaple/support/ld" includes="**/*" /> </copy>
-
-        <copy todir="build/${ant.project.name}/libmaple"> <fileset dir="../../files/libmaple/libmaple" includes="**/*"/> </copy>
-        <copy todir="build/${ant.project.name}/libraries"> <fileset dir="../../files/libmaple/libraries/" includes="**/*"/> </copy>
-        <copy todir="build/${ant.project.name}/examples"> <fileset dir="../../files/maple-ide/build/shared/examples/" includes="**/*"/> </copy>
-
-        <copy todir="build/${ant.project.name}/tools"> <fileset dir="tools/" includes="**/*"/> </copy>
-        <copy todir="build/${ant.project.name}" file="../../files/maple-ide/build/shared/lib/keywords.txt" />
-        <copy todir="build/${ant.project.name}" file="core.txt" />
+        <mkdir dir="build/${ant.project.name}/icons" />
+        
+        <copy todir="build/${ant.project.name}"><fileset dir="files/${ant.project.name}" includes="**/*" /></copy>
+        <copy todir="build/${ant.project.name}/icons"><fileset dir="icons" includes="**/*" /></copy>
+        <copy todir="build/${ant.project.name}" file="core.txt" overwrite="true" />
         <replace file="build/${ant.project.name}/core.txt" token="%VERSION%" value="${version}" />
         <replace file="build/${ant.project.name}/core.txt" token="%REVISION%" value="${revision}" />
 
@@ -61,7 +28,7 @@
     </target>
 
     <target name="install" depends="build">
-        <move file="${ant.project.name}.jar" todir="/var/www/uecide/plugins/cores" />
+        <move file="${ant.project.name}.jar" todir="/var/www/uecide/plugins-087/cores" />
     </target>
 
     <target name="clean">

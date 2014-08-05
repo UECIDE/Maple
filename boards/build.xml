@@ -3,7 +3,7 @@
 
 
     <property name="version" value="1" />
-    <property name="revision" value="9" />
+    <property name="revision" value="10" />
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -60,7 +60,8 @@
         <propertyfile file="Maple/${board}/board.txt">
             <entry key="group" value="Maple" />
             <entry key="family" value="maple" />
-            <entry key="name" value="${name}" />
+            <entry key="name" value="${board}" />
+            <entry key="description" value="${name}" />
             <entry key="build.board" value="_BOARD_${board}_" />
             <entry key="build.mcu" value="${build.mcu}" />
             <entry key="build.series" value="stm32f1" />
@@ -71,6 +72,7 @@
             <entry key="build.error_led_port" value="${build.error_led_port}" />
             <entry key="build.error_led_pin" value="${build.error_led_pin}" />
             <entry key="build.vector" value="${build.vector}" />
+            <entry key="board.define" value="-DBOOTLOADER_maple" />
             <entry key="build.ldscript" value="${build.ldscript}" />
             <entry key="upload.maximum_size" value="${upload.maximum_size}" />
             <entry key="upload.maximum_ram" value="${upload.maximum_ram}" />

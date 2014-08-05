@@ -2,8 +2,8 @@
 
 group=Maple
 family=maple
-name=LeafLabs Maple Rev 3+ to Flash
-build.board=_BOARD_maple_
+description=LeafLabs Maple Rev 3+ to Flash
+build.board=BOARD_maple
 build.mcu=STM32F103RB
 build.series=stm32f1
 build.f_cpu=72000000L
@@ -13,11 +13,13 @@ build.density=STM32_MEDIUM_DENSITY
 build.error_led_port=GPIOA
 build.error_led_pin=5
 build.vector=VECT_TAB_FLASH
-build.ldscript=flash.ld
+build.ldscript=maple/flash.ld
 build.ldpath=sram_20k_flash_128k
 upload.maximum_size=108000
 upload.maximum_ram=17000
 upload.altID=1
 upload.usbID=1EAF\:0003
 version=1
-revision=10
+revision=13
+name=maple
+core=maple

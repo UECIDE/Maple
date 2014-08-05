@@ -2,33 +2,25 @@ name=maple
 description=Arduino compatability API for Maple Arm boards
 compiler=arm-maple-gcc
 
-version=%VERSION%
-revision=%REVISION%
+core.library.api=api
+
+core.header=WProgram.h
 core.version=%VERSION%
 core.revision=%REVISION%
+version=%VERSION%
+revision=%REVISION%
 
-core.library.api=api::api/${build.series}
-core.library.maple=libmaple
-core.library.stm32=libmaple/${build.series}
-core.library.usb=libmaple/usb/usb_lib::${if:${build.series}=stm32f1,libmaple/usb/${build.series}}
-
-core.header=wirish/WProgram.h
-
-core.flags=-D${build.board}::-DMCU_${build.mcu}::-DERROR_LED_PORT=${build.error_led_port}::-DERROR_LED_PIN=${build.error_led_pin}::-D${build.vector}::-DMAPLE_IDE::-DARDUINO=${core.version}::-I${core.root}/api/include::-I${core.root}/libmaple::-I${core.root}/libmaple/include::-I${core.root}/libmaple/${build.series}/include::-I${core.root}/libmaple/usb/usb_lib
-
-core.ldflags=-L${core.root}/ld::-L${core.root}/ld/stm32/mem/${build.ldpath}::-L${core.root}/ld/stm32/${build.series}::-L${core.root}/ld/toolchains/generic::${if:${build.series}=stm32f1,-L${core.root}/ld/stm32/series/stm32f1/performance}::-T${core.root}/ld/${build.ldscript}
+core.flags=-D${build.board}::-DMCU_${build.mcu}::-D${build.density}::-DERROR_LED_PORT=${build.error_led_port}::-DERROR_LED_PIN=${build.error_led_pin}::-D${build.vector}::-DMAPLE_IDE::-DARDUINO=${core.version}::
 
 library.path=libraries
 examples.path=examples
 
 board=_UNKNOWN_BOARD_
 
-build.files=board.cpp
-
 upload.dfu.name=DFU Capable Board
-upload.dfu.command.linux=${core.root}/tools/linux/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}
-upload.dfu.command.macosx=${core.root}/tools/macosx/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}
-upload.dfu.command.windows=${core.root}/tools/windows/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}
+upload.dfu.command.linux=${core.root}/tools/linux/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}::-R
+upload.dfu.command.macosx=${core.root}/tools/macosx/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}::-R
+upload.dfu.command.windows=${core.root}/tools/windows/dfu-util::-D::${build.path}/${filename}.bin::-a::${upload.altID}::-d::${upload.usbID}::-R
 
 upload.dfu.using=serial
 upload.dfu.dtr=yes
@@ -38,4 +30,12 @@ sketch.upload=dfu
 
 family=maple
 
+core.ldflags=-Xlinker::--gc-sections::--print-gc-sections::-T${core.root}/api/${build.ldscript}::-L${core.root}/api
+                                     
+icon.128=icons/maple128.png
+icon.64=icons/maple64.png
+icon.48=icons/maple48.png
+icon.32=icons/maple32.png
+icon.22=icons/maple22.png
+icon.16=icons/maple16.png
 
